@@ -3,13 +3,18 @@ services:
   - docker
 
 before_install:
-  - docker build -t damianlis/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t damianlis1293/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true USERNAME/react-test npm test
+  - docker run damianlis1293/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t damianlis/multi-client ./client
-  - docker build -t damianlis/multi-nginx ./nginx
-  - docker build -t damianlis/multi-server ./server
-  - docker build -t damianlis/multi-worker ./worker
+  - docker build -t damianlis1293/multi-client ./client
+  - docker build -t damianlis1293/multi-nginx ./nginx
+  - docker build -t damianlis1293/multi-server ./server
+  - docker build -t damianlis1293/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push damianlis1293/multi-client
+  - docker push damianlis1293/multi-nginx
+  - docker push damianlis1293/multi-server
+  - docker push damianlis1293/multi-worker
